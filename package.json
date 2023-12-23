@@ -20,6 +20,7 @@
   "dependencies": {
     "@nuxt/ui": "^2.11.1",
     "@nuxtjs/toast": "^3.3.1",
-    "gh-pages": "^6.1.1"
+    "gh-pages": "^6.1.1",
+    "yarn": "^1.22.21"
   }
 }
