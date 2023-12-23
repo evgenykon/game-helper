@@ -1,0 +1,16 @@
+FROM node:20 as node
+
+WORKDIR /home/app
+
+COPY . /home/app
+
+RUN apt-get update -y && apt-get install -y curl nano zsh
+RUN npm install -g npm@8.12.1
+RUN npm install -g pnpm
+
+RUN export DOCKER_SCAN_SUGGEST=false
+EXPOSE 3000
+
+RUN yarn install && yarn run build
+
+CMD [ "yarn", "run", "dev" ]

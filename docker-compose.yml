@@ -1,0 +1,17 @@
+services:
+
+  front:
+    build:
+      dockerfile: docker/Dockerfile.frontend.yml
+    image: frontend
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/home/app
+    ports:
+      - 3000:3000
+    deploy:
+      resources:
+        limits:
+          memory: 2GB
+          cpus: '0.5'
