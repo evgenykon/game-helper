@@ -1,0 +1,1 @@
+import{_ as o,a}from"./client-only.98a0c05f.js";import{g as _,h as s,i as c,w as e,o as l,a as r,b as u,d as m}from"./entry.e13ab4e0.js";const C=_({__name:"index",setup(p){return s(),(i,d)=>{const n=a,t=o;return l(),c(t,null,{default:e(()=>[r("main",null,[u(n,null,{default:e(()=>[m(" Choose a game ")]),_:1})])]),_:1})}}});export{C as default};
