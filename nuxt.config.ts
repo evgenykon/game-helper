@@ -11,8 +11,12 @@ export default defineNuxtConfig({
   devServer: {
     host: '0.0.0.0'
   },
-  app: {
-    baseURL: "/game-helper/"
+  experimental: {
+    payloadExtraction: true
   },
-
+  runtimeConfig: {
+    public: {
+      baseURL: 'https://evgenykon.github.io/game-helper/',
+    },
+  },
 })
