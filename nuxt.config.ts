@@ -16,7 +16,22 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      baseURL: 'https://evgenykon.github.io/game-helper/',
+      baseURL: '/game-helper/',
+    },
+  },
+  app: {
+    baseURL: '/game-helper/',
+    head: {
+      title: 'Game Helper',
+      meta: [
+        { charset: 'utf-8' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        { hid: 'description', name: 'description', content: 'Game Helper: Monopoly' },
+        { name: 'format-detection', content: 'telephone=no' }
+      ],
+      link: [
+        { rel: 'icon', type: 'image/svg', href: '/favicon.svg' }
+      ]
     },
   },
 })

@@ -1,4 +1,14 @@
+version: "3.2"
+
 services:
+
+  builder:
+    build:
+      dockerfile: docker/Dockerfile.frontend.yml
+    image: frontend
+    volumes:
+      - game-helper-volume:/home/app
+      - .:/home/repo
 
   front:
     build:
@@ -7,7 +17,7 @@ services:
     stdin_open: true
     tty: true
     volumes:
-      - .:/home/app
+      - game-helper-volume:/home/app
     ports:
       - 3000:3000
     deploy:
@@ -15,3 +25,6 @@ services:
         limits:
           memory: 2GB
           cpus: '0.5'
+
+volumes:
+  game-helper-volume:

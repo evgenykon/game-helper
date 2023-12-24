@@ -1,12 +1,19 @@
 ###
-build:
+build-images:
 	docker-compose build
-# 1
+
+build-frontend:
+	docker-compose run builder bash -c "yarn install && yarn build"
+
+build-github:
+	docker-compose run builder bash -c "yarn install && yarn build && cp -R /home/app/.output /home/repo/.output"
+
+
 up:
 	docker-compose up -d
-# 2
+
 down:
 	docker-compose down
-# 3
-front:
-	docker exec -it front bash
+
+cmd:
+	docker-compose run builder bash
