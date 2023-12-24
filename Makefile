@@ -6,7 +6,7 @@ build-frontend:
 	docker-compose run builder bash -c "yarn install && yarn build"
 
 build-github:
-	docker-compose run builder bash -c "yarn install && yarn build && cp -R /home/app/.output /home/repo/.output"
+	docker-compose run builder bash -c "yarn install && yarn build && cp -R /home/app/.output /home/repo/"
 
 
 up:
