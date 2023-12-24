@@ -8,11 +8,12 @@ export default defineNuxtConfig({
     '/api/*': {cache: {maxAge: 60 * 60}},
   },
   modules: ['@nuxt/ui', ],
+  ssr: false,
+  experimental: {
+    payloadExtraction: false
+  },
   devServer: {
     host: '0.0.0.0'
-  },
-  experimental: {
-    payloadExtraction: true
   },
   runtimeConfig: {
     public: {
