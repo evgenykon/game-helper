@@ -1,10 +1,10 @@
 const client_manifest = {
-  "_client-only.b008cef6.js": {
+  "_client-only.5df37fa8.js": {
     "resourceType": "script",
     "module": true,
     "prefetch": true,
     "preload": true,
-    "file": "client-only.b008cef6.js",
+    "file": "client-only.5df37fa8.js",
     "imports": [
       "node_modules/nuxt/dist/app/entry.js"
     ]
@@ -22,7 +22,7 @@ const client_manifest = {
     "prefetch": true,
     "preload": true,
     "css": [],
-    "file": "error-404.8f9443e0.js",
+    "file": "error-404.5a9291df.js",
     "imports": [
       "node_modules/nuxt/dist/app/entry.js"
     ],
@@ -48,7 +48,7 @@ const client_manifest = {
     "prefetch": true,
     "preload": true,
     "css": [],
-    "file": "error-500.6ddb9326.js",
+    "file": "error-500.ad3fe179.js",
     "imports": [
       "node_modules/nuxt/dist/app/entry.js"
     ],
@@ -74,7 +74,7 @@ const client_manifest = {
     "prefetch": true,
     "preload": true,
     "css": [],
-    "file": "IconCSS.8f1fe942.js",
+    "file": "IconCSS.9c9f368c.js",
     "imports": [
       "node_modules/nuxt/dist/app/entry.js"
     ],
@@ -106,7 +106,7 @@ const client_manifest = {
       "node_modules/@nuxt/ui-templates/dist/templates/error-404.vue",
       "node_modules/@nuxt/ui-templates/dist/templates/error-500.vue"
     ],
-    "file": "entry.b4b8773f.js",
+    "file": "entry.5e16960e.js",
     "isEntry": true,
     "src": "node_modules/nuxt/dist/app/entry.js",
     "_globalCSS": true
@@ -130,9 +130,9 @@ const client_manifest = {
     "prefetch": true,
     "preload": true,
     "css": [],
-    "file": "index.3b38e689.js",
+    "file": "index.750fcde5.js",
     "imports": [
-      "_client-only.b008cef6.js",
+      "_client-only.5df37fa8.js",
       "node_modules/nuxt/dist/app/entry.js"
     ],
     "isDynamicEntry": true,
@@ -157,10 +157,10 @@ const client_manifest = {
     "prefetch": true,
     "preload": true,
     "css": [],
-    "file": "monopoly.164d1449.js",
+    "file": "monopoly.cff6d050.js",
     "imports": [
       "node_modules/nuxt/dist/app/entry.js",
-      "_client-only.b008cef6.js"
+      "_client-only.5df37fa8.js"
     ],
     "isDynamicEntry": true,
     "src": "pages/monopoly.vue"
