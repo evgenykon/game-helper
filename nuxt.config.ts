@@ -9,16 +9,8 @@ export default defineNuxtConfig({
   },
   modules: ['@nuxt/ui', ],
   ssr: false,
-  experimental: {
-    payloadExtraction: false
-  },
   devServer: {
     host: '0.0.0.0'
-  },
-  runtimeConfig: {
-    public: {
-      baseURL: '/game-helper/',
-    },
   },
   app: {
     baseURL: '/game-helper/',
