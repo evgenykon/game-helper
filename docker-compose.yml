@@ -3,21 +3,19 @@ version: "3.2"
 services:
 
   builder:
-    build:
-      dockerfile: docker/Dockerfile.frontend.yml
-    image: frontend
+    image: effus/my:frontend_builder
     volumes:
-      - game-helper-volume:/home/app
-      - .:/home/repo
+      - ./frontend:/home/app
+    networks:
+      - dockerNet
 
   front:
-    build:
-      dockerfile: docker/Dockerfile.frontend.yml
-    image: frontend
+    image: effus/my:frontend_builder
     stdin_open: true
     tty: true
     volumes:
-      - game-helper-volume:/home/app
+      - ./frontend:/home/app
+      - ./docker/nginx/nginx.conf:/home/app
     ports:
       - 3000:3000
     deploy:
@@ -25,6 +23,20 @@ services:
         limits:
           memory: 2GB
           cpus: '0.5'
+    networks:
+      - dockerNet
 
-volumes:
-  game-helper-volume:
+  nginx:
+    image: nginx:latest
+    networks:
+      - dockerNet
+    depends_on:
+      - front
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+
+networks:
+  dockerNet:
