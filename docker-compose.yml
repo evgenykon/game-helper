@@ -3,7 +3,8 @@ version: "3.2"
 services:
 
   builder:
-    image: effus/my:frontend_builder
+    build:
+      dockerfile: ./docker/Dockerfile.frontend.yml
     volumes:
       - ./frontend:/home/app
     networks:
