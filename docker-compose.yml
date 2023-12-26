@@ -20,11 +20,11 @@ services:
       - ./docker/nginx/nginx.conf:/home/app
     ports:
       - 3000:3000
-    deploy:
-      resources:
-        limits:
-          memory: 2GB
-          cpus: '0.5'
+#    deploy:
+#      resources:
+#        limits:
+#          memory: 2GB
+#          cpus: '0.5'
     networks:
       - dockerNet
 
