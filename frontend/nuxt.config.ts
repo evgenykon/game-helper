@@ -13,7 +13,7 @@ export default defineNuxtConfig({
     host: '0.0.0.0'
   },
   app: {
-    baseURL: '/game-helper/',
+    //baseURL: '/game-helper/',
     head: {
       title: 'Game Helper',
       meta: [
