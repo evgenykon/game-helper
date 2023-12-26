@@ -27,6 +27,7 @@ services:
 #          cpus: '0.5'
     networks:
       - dockerNet
+    command: bash -c "yarn run prod"
 
   nginx:
     image: nginx:latest
