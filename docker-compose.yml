@@ -11,9 +11,10 @@ services:
       - dockerNet
 
   front:
-    image: effus/my:frontend_builder
-    stdin_open: true
-    tty: true
+    build:
+      dockerfile: ./docker/Dockerfile.frontend.yml
+#    stdin_open: true
+#    tty: true
     volumes:
       - ./frontend:/home/app
       - ./docker/nginx/nginx.conf:/home/app
