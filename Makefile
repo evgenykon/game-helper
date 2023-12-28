@@ -1,8 +1,8 @@
 ### To build project from zero:
 
-#1 (if any changes in docker/Dockerfile.frontend.yml)
-hub-build-push:
-	docker buildx build -t effus/my:frontend_builder -f docker/Dockerfile.frontend.yml . && docker push "effus/my:frontend_builder"
+##1 (if any changes in docker/Dockerfile.frontend.yml)
+#container-build:
+#	docker buildx build -f docker/Dockerfile.frontend.yml frontend
 
 #2 build images
 build-images:
@@ -18,6 +18,9 @@ up:
 
 down:
 	docker-compose down
+
+dev:
+	docker-compose run -p "13200:3000" front bash -c "yarn run dev"
 
 cmd:
 	docker-compose run builder bash

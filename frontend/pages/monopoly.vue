@@ -41,6 +41,9 @@ export default {
     }
   },
   methods: {
+    showError(e) {
+      alert(e.message);
+    },
     selectScheme() {
       this.player.init(this.currentScheme?.startBalance ?? 0);
       this.operations.list = this.currentScheme?.operations.map(item => item as GameOperation) ?? []
@@ -54,6 +57,9 @@ export default {
       this.operations.inputAmount = 0
     },
     buyProperty() {
+      if (!confirm('Купить собственность?')) {
+        return
+      }
       try {
         this.decBalance(this.currentOperationTarget?.upgrades[0].price ?? 0)
         this.player.properties.push({
@@ -65,7 +71,25 @@ export default {
         localStorage['player.properties'] = JSON.stringify(this.player.properties)
 
       } catch (e) {
-        console.error(e.message)
+        this.showError(e.message)
+      }
+    },
+    buyPropertyByAuction() {
+      if (!confirm('Купить собственность?')) {
+        return
+      }
+      try {
+        this.decBalance(this.operations.inputAmount)
+        this.player.properties.push({
+          property: this.currentOperationTarget,
+          level: 1,
+          currentUpgrade: this.currentOperationTarget?.upgrades.find(item => item.level === 1)
+        } as PlayerProperty)
+        this.resetTarget()
+        localStorage['player.properties'] = JSON.stringify(this.player.properties)
+
+      } catch (e) {
+        this.showError(e.message)
       }
     },
     upgradeProperty() {
@@ -93,7 +117,7 @@ export default {
         localStorage['player.properties'] = JSON.stringify(this.player.properties)
 
       } catch (e) {
-        console.error(e.message)
+        this.showError(e.message)
       }
     },
     decBalance(value:number) {
@@ -116,18 +140,31 @@ export default {
         }
         this.decBalance(value)
         this.resetTarget()
+
       } catch (e) {
-        console.error(e.message)
+        this.showError(e.message)
       }
     },
-
+    clickGetRent(item:PlayerProperty) {
+      this.selectOperation({id:'income', name:''} as GameOperation)
+      if (item.property.type === 'city') {
+        this.operations.inputAmount = item.currentUpgrade.tax;
+      }
+    },
+    clickUpgrade(item:PlayerProperty) {
+      this.selectOperation({id:'upgrade', name:''} as GameOperation)
+      if (item.property.type === 'city') {
+        this.operations.targetId = item.property.id;
+      }
+    },
     getIncome() {
       try {
         const value = this.operations.inputAmount;
         this.incBalance(value)
         this.resetTarget()
+
       } catch (e) {
-        console.error(e.message)
+        this.showError(e.message)
       }
     },
 
@@ -136,8 +173,32 @@ export default {
         const value = this.currentScheme?.roundIncomeAmount ?? 0;
         this.incBalance(value)
         this.resetTarget()
+
       } catch (e) {
-        console.error(e.message)
+        this.showError(e.message)
+      }
+    },
+
+    confirmSell(item) {
+      const price1 = item.property.upgrades[0].price;
+      if (confirm(`Продать другому игроку за ${price1}?`)) {
+        try {
+          this.player.properties = this.player.properties.filter((prop:PlayerProperty) => prop.property.id !== item.property.id)
+          this.incBalance(price1)
+          this.resetTarget()
+          localStorage['player.properties'] = JSON.stringify(this.player.properties)
+
+        } catch (e) {
+          this.showError(e.message)
+        }
+
+      }
+    },
+
+    confirmPawn(item) {
+      console.log(item)
+      if (confirm('Заложить собственность банку?')) {
+
       }
     }
   },
@@ -198,11 +259,11 @@ export default {
 
 <template>
   <ClientOnly>
-    <main>
+    <main class="bg">
 
       <UContainer class="monopoly-layout">
         <div class="row">
-          <div class="label">Scheme</div>
+          <div class="label">Схема</div>
           <div class="input">
             <USelect v-model="schemes.currentId" :options="schemes.list" option-attribute="name" value-attribute="id" @change="selectScheme" />
           </div>
@@ -225,10 +286,14 @@ export default {
           </div>
         </div>
         <div class="row">
-          <div class="label">Balance</div>
+          <div class="label">Ваш баланс</div>
           <div class="input">
             <UInput color="primary" variant="outline" v-model="player.balance" />
           </div>
+        </div>
+
+        <div class="row mt-5">
+          <h5 class="label">Действия</h5>
         </div>
         <div class="row" v-if="operations.list">
             <UButton
@@ -244,27 +309,52 @@ export default {
 
         <!-- Operation: buy -->
         <div class="row" v-if="operations.current?.id === 'buy'">
-          <USelect v-model="operations.targetId" :options="availableProperties" />
-          <UInput color="primary"
-                  variant="outline"
-                  disabled
-                  :model-value="currentOperationTarget?.upgrades[0].price">
-            <template #leading>
-              <span class="text-gray-500 dark:text-gray-400 text-xs">$</span>
-            </template>
-          </UInput>
-          <UButton
-              color="primary"
-              label="Buy"
-              :disabled="!currentOperationTarget"
-              @click="buyProperty"
-          />
+          <div class="row">
+            <USelect class="w-30" v-model="operations.targetId" :options="availableProperties" />
+            <UInput color="primary"
+                    class="w-30"
+                    variant="outline"
+                    disabled
+                    :model-value="currentOperationTarget?.upgrades[0].price">
+              <template #leading>
+                <span class="text-gray-500 dark:text-gray-400 text-xs">$</span>
+              </template>
+            </UInput>
+            <UButton
+                class="w-30"
+                color="cyan"
+                label="Покупка"
+                variant="soft"
+                :disabled="!currentOperationTarget"
+                @click="buyProperty"
+            />
+          </div>
+          <div class="row">
+            <UInput color="primary"
+                    variant="outline"
+                    label="Аукцион"
+                    class="ml-30 w-30"
+                    :disabled="!currentOperationTarget"
+                    v-model="operations.inputAmount">
+              <template #leading>
+                <span class="text-gray-500 dark:text-gray-400 text-xs">$</span>
+              </template>
+            </UInput>
+            <UButton
+                class="w-30"
+                color="cyan"
+                variant="soft"
+                label="Аукцион"
+                :disabled="!currentOperationTarget"
+                @click="buyPropertyByAuction"
+            />
+          </div>
         </div>
 
         <!-- Operation: upgrade -->
         <div class="row" v-if="operations.current?.id === 'upgrade'">
           <USelect v-model="operations.targetId" :options="availablePlayerUpgrades" />
-          <div>Next level: {{nextUpgrade.level}}</div>
+          <div v-if="nextUpgrade.level > 0">Next level: {{nextUpgrade.level}}</div>
           <UInput color="primary"
                   variant="outline"
                   :model-value="nextUpgrade.price"
@@ -283,7 +373,7 @@ export default {
 
         <!-- Operation: rent/tax -->
         <div class="row" v-if="['outcome'].includes(operations.current?.id ?? '')">
-          <div>Pay for rent</div>
+          <div>Рента</div>
           <UInput color="primary"
                   variant="outline"
                   v-model="operations.inputAmount">
@@ -293,7 +383,7 @@ export default {
           </UInput>
           <UButton
               color="primary"
-              label="Pay"
+              label="Заплатить"
               @click="payRent"
           />
         </div>
@@ -301,7 +391,14 @@ export default {
         <!-- Operation: income -->
         <div class="row" v-if="['income'].includes(operations.current?.id ?? '')">
           <div class="row">
-            <div>Amount</div>
+            <UButton
+                color="primary"
+                label="Премия за круг"
+                @click="getRoundIncome"
+            />
+          </div>
+          <div class="row">
+            <div>Сумма</div>
             <UInput color="primary"
                     variant="outline"
                     v-model="operations.inputAmount">
@@ -311,33 +408,73 @@ export default {
             </UInput>
             <UButton
                 color="primary"
-                label="Get Income"
+                label="Получить"
                 @click="getIncome"
             />
           </div>
           <div class="flex-break"></div>
-          <div class="row">
-            <UButton
-                color="primary"
-                label="Get Round Income"
-                @click="getRoundIncome"
-            />
-          </div>
+
         </div>
 
 
         <!-- Player properties -->
         <div class="row mt-10" v-if="player.properties.length > 0">
-          <div class="label">Properties</div>
+          <h5 class="label">Собственность</h5>
         </div>
         <div class="grid" v-if=" player.properties.length > 0">
           <div class="grid-cell" v-for="item in player.properties">
             <div class="title" :class="[item.property.groupColor]">{{item.property.id}}</div>
-            <div class="subtitle">Price: {{item.currentUpgrade.price}}</div>
-            <div class="subtitle" v-if="item.property.type === 'city'">Tax: {{item.currentUpgrade.tax}}</div>
+            <div class="subtitle">Цена: {{item.currentUpgrade.price}}</div>
+            <div class="subtitle" v-if="item.property.type === 'city'">Рента: {{item.currentUpgrade.tax}}</div>
             <div class="subtitle" v-if="item.property.type === 'city'">
               Level:
               <UIcon v-for="(n, i) in item.currentUpgrade.level" name="i-heroicons-arrow-uturn-up-20-solid"></UIcon>
+            </div>
+            <div class="prop-row">
+              <!-- UButton
+                  icon="i-heroicons-arrow-uturn-left-16-solid"
+                  size="sm"
+                  color="amber"
+                  square
+                  variant="outline"
+                  @click="confirmSell(item)"
+              / -->
+              <UButton
+                  class="prop-btn"
+                  icon="i-heroicons-plus-circle-20-solid"
+                  size="sm"
+                  color="cyan"
+                  label="Получить ренту"
+                  variant="outline"
+                  @click="clickGetRent(item)"
+              />
+              <UButton
+                  v-if="item.currentUpgrade.level < item.property.upgrades.length-1"
+                  class="prop-btn"
+                  icon="i-heroicons-arrow-up-on-square"
+                  size="sm"
+                  color="cyan"
+                  label="Upgrade"
+                  variant="outline"
+                  @click="clickUpgrade(item)"
+              />
+              <!-- UButton
+                  class="prop-btn"
+                  icon="i-heroicons-arrow-right-circle-16-solid"
+                  size="sm"
+                  color="cyan"
+                  label="Вернуть залог"
+                  variant="outline"
+              / -->
+              <UButton
+                  class="prop-btn"
+                  icon="i-heroicons-arrow-left-circle-16-solid"
+                  size="sm"
+                  color="cyan"
+                  label="Заложить"
+                  variant="outline"
+                  @click="confirmPawn(item)"
+              />
             </div>
           </div>
         </div>
@@ -358,6 +495,9 @@ export default {
   color: var(--data-color-white);
 }
 .monopoly-layout {
+  h5 {
+    color: var(--data-color-primary);
+  }
   .row {
     display: flex;
     width: 100%;
@@ -366,6 +506,12 @@ export default {
     align-items: baseline;
     gap: 2px;
     flex-wrap: wrap;
+    .w-30 {
+      width:30%;
+    }
+    .ml-30 {
+      margin-left: 35%;
+    }
   }
   .flex-break {
     flex-basis: 100%;
@@ -382,7 +528,7 @@ export default {
   }
   .grid {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
     grid-gap: 3px;
     .grid-cell {
       background-color: #4B4B4BD8;
@@ -390,6 +536,7 @@ export default {
       font-weight: normal;
       display: flex;
       flex-flow: column;
+      padding: 5px;
       .title {
         padding: 5px;
         color: #fff;
@@ -423,6 +570,16 @@ export default {
         padding: 5px;
         font-size: 12px;
         margin-top: 4px;
+      }
+      .prop-row {
+        padding-top: 10px;
+        display: flex;
+        margin-top: auto;
+        flex-wrap: wrap;
+        gap: 3px;
+        .prop-btn {
+
+        }
       }
     }
   }

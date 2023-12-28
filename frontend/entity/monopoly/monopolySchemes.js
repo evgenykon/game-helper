@@ -10,11 +10,11 @@ const schemes = [
         operations: [
             {
                 id: 'buy',
-                name: 'Купить город'
+                name: 'Купить'
             },
             {
                 id: 'upgrade',
-                name: 'Upgrade города'
+                name: 'Upgrade'
             },
             {
                 id: 'outcome',
