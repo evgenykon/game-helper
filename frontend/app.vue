@@ -21,11 +21,12 @@ function changeTab(index:number) {
 }
 
 function pageIndex() {
-  const pages = {
-    "/": 0,
-    "/monopoly": 1
-  };
-  return pages[this.router?.currentRoute?.value?.path ?? 0];
+  // const pages = {
+  //   "/": 0,
+  //   "/monopoly": 1
+  // };
+  // return pages[this.router?.currentRoute?.value?.path ?? 0];
+  return 0;
 }
 </script>
 
