@@ -71,7 +71,7 @@ export default {
         localStorage['player.properties'] = JSON.stringify(this.player.properties)
 
       } catch (e) {
-        this.showError(e.message)
+        this.showError(e)
       }
     },
     buyPropertyByAuction() {
@@ -89,7 +89,7 @@ export default {
         localStorage['player.properties'] = JSON.stringify(this.player.properties)
 
       } catch (e) {
-        this.showError(e.message)
+        this.showError(e)
       }
     },
     upgradeProperty() {
@@ -117,7 +117,7 @@ export default {
         localStorage['player.properties'] = JSON.stringify(this.player.properties)
 
       } catch (e) {
-        this.showError(e.message)
+        this.showError(e)
       }
     },
     decBalance(value:number) {
@@ -142,7 +142,7 @@ export default {
         this.resetTarget()
 
       } catch (e) {
-        this.showError(e.message)
+        this.showError(e)
       }
     },
     clickGetRent(item:PlayerProperty) {
@@ -164,7 +164,7 @@ export default {
         this.resetTarget()
 
       } catch (e) {
-        this.showError(e.message)
+        this.showError(e)
       }
     },
 
@@ -175,7 +175,7 @@ export default {
         this.resetTarget()
 
       } catch (e) {
-        this.showError(e.message)
+        this.showError(e)
       }
     },
 
@@ -189,7 +189,7 @@ export default {
           localStorage['player.properties'] = JSON.stringify(this.player.properties)
 
         } catch (e) {
-          this.showError(e.message)
+          this.showError(e)
         }
 
       }
