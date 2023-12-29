@@ -26,6 +26,7 @@ function pageIndex() {
   //   "/monopoly": 1
   // };
   // return pages[this.router?.currentRoute?.value?.path ?? 0];
+  console.log('pageIndex', this.router)
   return 0;
 }
 </script>
