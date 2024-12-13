@@ -6,25 +6,28 @@ services:
     build:
       dockerfile: ./docker/Dockerfile.frontend.yml
     volumes:
-      - ./frontend:/home/app
+#      - ./monopoly/frontend:/home/app
+      - ./dnd/frontend:/home/app
     networks:
       - dockerNet
+
+  front-dev:
+    build:
+      dockerfile: ./docker/Dockerfile.frontend.yml
+    volumes:
+      - ./dnd/frontend:/home/app
+    ports:
+      - 3000:3000
+    command: bash -c "yarn run dev"
 
   front:
     build:
       dockerfile: ./docker/Dockerfile.frontend.yml
-#    stdin_open: true
-#    tty: true
     volumes:
-      - ./frontend:/home/app
+#      - ./monopoly/frontend:/home/app
       - ./docker/nginx/nginx.conf:/home/app
     ports:
       - 3000:3000
-#    deploy:
-#      resources:
-#        limits:
-#          memory: 2GB
-#          cpus: '0.5'
     networks:
       - dockerNet
     command: bash -c "yarn run prod"

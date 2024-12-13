@@ -4,8 +4,8 @@
 #container-build:
 #	docker buildx build -f docker/Dockerfile.frontend.yml frontend
 
-#2 build images
-build-images:
+#2 build docker images
+build-docker:
 	docker-compose build
 
 #3 build front
@@ -20,7 +20,7 @@ down:
 	docker-compose down
 
 dev:
-	docker-compose run -p "13200:3000" front bash -c "yarn run dev"
+	docker-compose up front-dev
 
 cmd:
-	docker-compose run builder bash
+	docker-compose run --rm builder bash
